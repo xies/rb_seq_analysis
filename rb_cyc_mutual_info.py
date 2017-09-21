@@ -11,6 +11,9 @@ from Bio import SeqIO, AlignIO, Phylo
 from collections import Counter
 from scipy import stats
 
+msa_file = '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/RB family/MSA/rb_filtered_1910_1940.fasta'
+rb = conkit.io.read(msa_file,'fasta')
+
 # Read in the filtered RB .aln clustal file
 msa_file = '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/RB family/MSA/rb_filtered.aln'
 RB = AlignIO.read(msa_file, "clustal")
@@ -53,18 +56,18 @@ for i,score in enumerate(sortedMI[st:st+10]):
     print 'Top ', st+i+1, 'th score: ', score, ' at alignment position: ', I[i], '\n'
 
 # Save RB motif region
-motif_beg = 1600
-motif_end = 2100
+motif_beg = 1910
+motif_end = 1940
 
-motif_aligned = rb_filt[:,motif_beg:motif_end]
+motif_aligned = rb_cc[:,motif_beg:motif_end]
 AlignIO.write([motif_aligned],
-              '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/RB family/MSA/rb_filtered_1600_2100.fasta','fasta')
+              '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/RB family/MSA/rb_cc_1910_1940.fasta','fasta')
 
 # Save Cyc motif only
-motif_beg = 1600
-motif_end = 2100
+motif_beg = 1500
+motif_end = 1590
 
-motif_aligned = rb_filt[:,motif_beg:motif_end]
+motif_aligned = cyc_cc[:,motif_beg:motif_end]
 AlignIO.write([motif_aligned],
-              '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/RB family/MSA/rb_filtered_1600_2100.fasta','fasta')
+              '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/Cyclin family/cyclin_cc_1500_1590.fasta','fasta')
 
