@@ -15,7 +15,7 @@ msa_file = '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/RB family/MSA/r
 rb = conkit.io.read(msa_file,'fasta')
 
 # Read in the filtered RB .aln clustal file
-msa_file = '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/RB family/MSA/rb_filtered.aln'
+msa_file = '/Users/mimi/Box Sync/Mol Bio/DNA sequences/RB family/MSA/rb_filtered.aln'
 RB = AlignIO.read(msa_file, "clustal")
 RB_array = np.array([list(rec) for rec in RB], np.character)
 
