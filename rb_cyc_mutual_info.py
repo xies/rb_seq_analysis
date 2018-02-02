@@ -11,11 +11,9 @@ from Bio import SeqIO, AlignIO, Phylo
 from collections import Counter
 from scipy import stats
 
-msa_file = '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/RB family/MSA/rb_filtered_1910_1940.fasta'
-rb = conkit.io.read(msa_file,'fasta')
 
 # Read in the filtered RB .aln clustal file
-msa_file = '/Users/mimi/Box Sync/Mol Bio/DNA sequences/RB family/MSA/rb_filtered.aln'
+msa_file = '/Users/mimi/Box Sync/Bioinformatics/RB helix/rb_fastas.aln'
 RB = AlignIO.read(msa_file, "clustal")
 RB_array = np.array([list(rec) for rec in RB], np.character)
 
