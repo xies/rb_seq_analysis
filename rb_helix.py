@@ -51,7 +51,7 @@ rb_liban = '/Users/mimi/Box Sync/Bioinformatics/RB helix/liban_rb.txt'
 RB_liban = AlignIO.read(rb_liban,'fasta')
 RB_liban_filtered = []
 for rec in RB_liban[:,965:]:
-    if ~all(unique(rec.seq) == '-'):
+    if ~all(np.unique(rec.seq) == '-'):
         RB_liban_filtered.append(rec)
 #        SeqIO.write(rec,''.join((path.dirname(rb_liban),'/liban_trimmed_helix.fasta')),'fasta')
         
@@ -59,85 +59,75 @@ SeqIO.write(RB_liban_filtered,''.join((path.dirname(rb_liban),'/liban_trimmed_he
 
 #Elife_RB/72_eukaryotes
 # --- Clean up hmmer3 server outputs ----
-
-filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/3__mafft_align/hmmer3_e-10_input_clustalo_mafft_server.fasta'
+filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/hmmer3_e-10_input_mafft_jackhmmer_mafft_align.fasta'
 hmmer3_mafft = AlignIO.read(filename,'fasta')
 
-# Find and print duplicate names for manual deletion
-names = np.array([rec.name for rec in hmmer3_mafft])
-all_aligned = []
-for rec in hmmer3_mafft:
-    if rec.name in names:
-        print 'Duplicate ', rec.name
-
-# Load trimmed FASTA files
-filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/hmmer3_e-10_input_mafft_jackhmmer_mafft_trimmed.mfa'
-hmmer3_mafft_trimmed = AlignIO.read(filename,'fasta')
-
 # Fix the record names
-for rec in hmmer3_mafft_trimmed:
+for rec in hmmer3_mafft:
     name = rec.name
     # Negative lookbehind regex
     new_name = re.search('(?<!\/)\w+', name)
     rec.name = new_name.group(0)
 
-    
-#
-## Load metazoa
-#filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/2__hmmsearch/metazoa/hmmer3_e-10_input_clustalo_metazoa.fasta'
-#metazoa = []
-#names = np.array([rec.name for rec in hmmer3_mafft_trimmed])
-#for rec in SeqIO.parse(filename,'fasta'):
-#    # Find metazoan seq name and pull up the corresponding
-#    hits = find(rec.name == names)
-#    if sum(hits.shape) > 0:        
-#        metazoa.append(hmmer3_mafft_trimmed[find(rec.name == names)[0]])
-#    
-#SeqIO.write(metazoa,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/3__mafft_align/metazoa/hmmer3_e-10_input_clustalo_mafft_server_trimmed_metazoa.fasta','fasta')
-#
-#
-## Load viridiplantae
-#filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/2__hmmsearch/viridiplantae/viridiplantae.fa'
-#plants = []
-#names = np.array([rec.name for rec in hmmer3_mafft_trimmed])
-#for rec in SeqIO.parse(filename,'fasta'):
-#    # Find plants seq name and pull up the corresponding
-#    hits = find(rec.name == names)
-#    if sum(hits.shape) > 0:        
-#        plants.append(hmmer3_mafft_trimmed[find(rec.name == names)[0]])
-#    
-#SeqIO.write(plants,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/3__mafft_align/viridiplantae/hmmer3_e-10_input_clustalo_mafft_server_trimmed_plants.fasta','fasta')
-#
-#
-## Load oomycetes
-#filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/2__hmmsearch/oomycetes/oomycetes.fa'
-#oomycetes = []
-#names = np.array([rec.name for rec in hmmer3_mafft_trimmed])
-#for rec in SeqIO.parse(filename,'fasta'):
-#    # Find oomycete seq name and pull up the corresponding
-#    hits = find(rec.name == names)
-#    if sum(hits.shape) > 0:        
-#        oomycetes.append(hmmer3_mafft_trimmed[find(rec.name == names)[0]])
-#    
-#SeqIO.write(oomycetes,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/3__mafft_align/oomycetes/hmmer3_e-10_input_clustalo_mafft_server_trimmed_oomycetes.fasta','fasta')
-#
-#
-#
-## Load heterotrichea
-#filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/2__hmmsearch/heterotrichea/heterotrichea.fasta'
-#heterotrichea = []
-#names = np.array([rec.name for rec in hmmer3_mafft_trimmed])
-#for rec in SeqIO.parse(filename,'fasta'):
-#    # Find oomycete seq name and pull up the corresponding
-#    hits = find(rec.name == names)
-#    if sum(hits.shape) > 0:        
-#        heterotrichea.append(hmmer3_mafft_trimmed[find(rec.name == names)[0]])
-#    
-#SeqIO.write(heterotrichea,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/3__mafft_align/heterotrichea/hmmer3_e-10_input_clustalo_mafft_server_trimmed_heterotrichea.fasta','fasta')
-#
+nonredundant = []
+redundant = []
+names_already_seen = []
+for rec in hmmer3_mafft:
+    if rec.name in names_already_seen:
+        redundant.append(rec)
+    else:
+        names_already_seen.append(rec.name)
+        nonredundant.append(rec)
 
+        
+##--- Load hit information from .csv file ---
+filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/3__jackhammer/hmmer3_e-10_input_mafft_jackhmmer.csv'
+metadata = pd.read_csv(filename,delimiter='\t')
 
+# Load trimmed FASTA files
+filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/hmmer3_e-10_input_mafft_jackhmmer_mafft_trimmed.mfa'
+hmmer3_mafft_trimmed = AlignIO.read(filename,'fasta')
 
+# Load nonredundant entries
+filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/hmmer3_e-10_input_mafft_jackhmmer_mafft_align_nonredundant.fasta'
+hmmer3_mafft = AlignIO.read(filename,'fasta')
+
+#----------
+# Use Uniprot to figure out organism name, rewrite FASTA entries with organism + protein name + UnitProt_entrykey
+u = UniProt()
+new_recs = []
+no_hits = []
+for rec in nonredundant:
+    if rec.seq.ungap('-') != '':
+        d = u.quick_search(rec.name,limit=1)
+        for k in d.keys():
+            latin_name = re.search('(\w+)\s(\w+)',d[k]['Organism'])
+            if latin_name != None:
+                latin_name = '_'.join((latin_name.group(1),latin_name.group(2)))
+                protein_names = '_'.join(re.findall('\w+',d[k]['Protein names']))
+                entry_name = re.search('(?<!\/)\w+', rec.name).group(0)
+                rec.id = '_'.join((latin_name,protein_names,entry_name))
+                new_recs.append(rec)
+            else:
+                no_hits.append(rec)
+    else:
+        no_hits.append(rec)
+
+SeqIO.write(new_recs,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/readable_names.fasta','fasta')
 
     
-    
+SeqIO.write(nonredundant,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/3__jackhammer/non_redundant/nonredundant.fasta','fasta')
+
+def find_redundant(seqs):
+        
+    nonredundant = []
+    redundant = []
+    names_already_seen = []
+    for rec in seqs:
+        if rec.description in names_already_seen:
+            redundant.append(rec)
+        else:
+            names_already_seen.append(rec.description)
+            nonredundant.append(rec)
+            
+    return redundant,nonredundant
