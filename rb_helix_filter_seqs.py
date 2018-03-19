@@ -23,14 +23,13 @@ filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/
 readable_trimmed = AlignIO.read(filename,'fasta')
 # Fix the record names
 for rec in readable_trimmed:
-    name = rec.name
+    name = rec.id
     # Negative lookbehind regex
     new_name = re.search('(?<!\/)\w+', name)
     new_name = '_'.join(re.split('_',new_name.group(0))[-2:])
     rec.name = new_name
 #    new_id = re.search('(?<!\/)\w+',rec.id)
 #    rec.id = new_id.group(0)
-    rec.description = rec.name
 
 opt = LogoOptions()
 opt.logo_start = 1
@@ -57,7 +56,7 @@ write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/
 filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/3__jackhammer/metazoa/metazoa.csv'
 df = pd.read_csv(filename,delimiter='\t')
 names = df['Target Accession'].values
-metazoa = filter_by_gene_name(readable_trimmed,names)
+metazoa = filter_by_gene_name(filtered,names)
 SeqIO.write(metazoa,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/readable_names_trimmed.fasta','fasta')
 
 opt.logo_title = 'Metazoan RB family'
@@ -205,8 +204,8 @@ def filter_by_occupancy(seqs,occupancy,thresh):
     for rec in seqs:
         s = np.array(rec.seq)[I]
         rec.seq = Seq(''.join(s))
-        if rec.seq.ungap('-') != '':
-            filtered.append(rec)
+#        if rec.seq.ungap('-') != '':
+#            filtered.append(rec)
     return filtered
     
 

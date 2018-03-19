@@ -7,7 +7,7 @@ Created on Sat Jan 20 20:16:13 2018
 """
 
 import numpy as np
-from Bio import SeqIO, AlignIO, Phylo
+from Bio import SeqIO, AlignIO, Phylo, Seq
 from collections import Counter
 from scipy import stats
 from os import path
@@ -63,7 +63,7 @@ filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/
 hmmer3_mafft = AlignIO.read(filename,'fasta')
 
 # Fix the record names
-for rec in hmmer3_mafft:
+for rec in hmmer3_aligned:
     name = rec.name
     # Negative lookbehind regex
     new_name = re.search('(?<!\/)\w+', name)
@@ -72,7 +72,7 @@ for rec in hmmer3_mafft:
 nonredundant = []
 redundant = []
 names_already_seen = []
-for rec in hmmer3_mafft:
+for rec in hmmer3_aligned:
     if rec.name in names_already_seen:
         redundant.append(rec)
     else:
@@ -91,6 +91,16 @@ hmmer3_mafft_trimmed = AlignIO.read(filename,'fasta')
 # Load nonredundant entries
 filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/hmmer3_e-10_input_mafft_jackhmmer_mafft_align_nonredundant.fasta'
 hmmer3_mafft = AlignIO.read(filename,'fasta')
+
+# Load HMMER3-aligned sequence and look through it directly
+filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/3__jackhammer/3__jackhmmer3_aligned.fasta'
+hmmer3_aligned = AlignIO.read(filename,'fasta')
+# fix the . into - in gapped sequences
+for rec in hmmer3_aligned:
+    s = rec.seq.tostring().replace('.','-')
+    rec.seq = Seq.Seq(s).upper()
+SeqIO.write(hmmer3_aligned,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/3__jackhammer/3__jackhmmer3_aligned_fixed.fasta','fasta')
+
 
 #----------
 # Use Uniprot to figure out organism name, rewrite FASTA entries with organism + protein name + UnitProt_entrykey
@@ -115,8 +125,11 @@ for rec in nonredundant:
 
 SeqIO.write(new_recs,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/readable_names.fasta','fasta')
 
-    
 SeqIO.write(nonredundant,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/3__jackhammer/non_redundant/nonredundant.fasta','fasta')
+
+
+
+#-------
 
 def find_redundant(seqs):
         

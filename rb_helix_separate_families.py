@@ -96,10 +96,22 @@ write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/
 
 
 #### USING ete3 Tree visualizer ####
+
+filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/metazoa.tree'
+tree = Tree(filename,format=1)
+tree.show()
+#
+## Fix the record names
+#for rec in metazoa:
+#    name = rec.name
+#    # Negative lookbehind regex
+#    new_name = re.search('(?<!\/)\w+', name)
+#    rec.id = new_name
+
 metazoa_names = [rec.name for rec in metazoa]
 # Load the subtrees associated with RBL1 family and record trimmed FASTA alignment
 dirname = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl1/'
-rbl1_treefiles = ['tree','tree2','tree3','tree4']
+rbl1_treefiles = ['tree.tree','tree2.tree','tree3.tree','tree4.tree','tree5.tree']
 rbl1_names = []
 for filename in rbl1_treefiles:
     rbl1_names.append(get_tree_leaves(''.join((dirname,filename))))
@@ -110,8 +122,8 @@ for name in rbl1_names:
     if name in metazoa_names:
         rbl1.append(metazoa[metazoa_names.index(name)])
     else:
-        print "Oh no!"
-        break
+        print "Oh no!", name
+#        break
 SeqIO.write(rbl1,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl1/rbl1_tree.mfa','fasta')
 opt.logo_title = 'RB-like 1 family'
 write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl1/rbl1_tree.mfa',
@@ -120,7 +132,7 @@ write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/
 
 # Load the subtrees associated with RBL2 (p130) family and record trimmed FASTA alignment
 dirname = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl2/'
-rbl2_treefiles = ['fish_rbl2.tree','more.tree','rbl2.tree','tree.nwk']
+rbl2_treefiles = ['tree.tree','tree2.tree','tree3.tree','tree4.tree','tree5.tree']
 rbl2_names = []
 for filename in rbl2_treefiles:
     rbl2_names.append(get_tree_leaves(''.join((dirname,filename))))
@@ -132,8 +144,8 @@ for name in rbl2_names:
     if name in metazoa_names:
         rbl2.append(metazoa[metazoa_names.index(name)])
     else:
-        print "Oh no!"
-        break
+        print "Oh no!", name
+#        break
 SeqIO.write(rbl2,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl2/rbl2_tree.mfa','fasta')
 opt.logo_title = 'RB-like 2 family'
 write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl2/rbl2_tree.mfa',
@@ -143,7 +155,7 @@ write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/
 
 # Load the subtrees associated with pRB family and record trimmed FASTA alignment
 dirname = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rb/'
-rb_treefiles = ['tree']
+rb_treefiles = ['tree.tree']
 rb_names = []
 for filename in rb_treefiles:
     rb_names.append(get_tree_leaves(''.join((dirname,filename))))
@@ -155,8 +167,8 @@ for name in rb_names:
     if name in metazoa_names:
         rb.append(metazoa[metazoa_names.index(name)])
     else:
-        print "Oh no!"
-        break
+        print "Oh no!", name
+#        break
 SeqIO.write(rb,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rb/rb_tree.mfa','fasta')
 opt.logo_title = 'pRB family'
 write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rb/rb_tree.mfa',
