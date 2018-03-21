@@ -132,7 +132,7 @@ SeqIO.write(nonredundant,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/
 #-------
 
 def find_redundant(seqs):
-        
+    "Return a list of redundant SeqIO .description entries"
     nonredundant = []
     redundant = []
     names_already_seen = []
@@ -144,3 +144,31 @@ def find_redundant(seqs):
             nonredundant.append(rec)
             
     return redundant,nonredundant
+
+
+def split_into_individual_fastas(filename):
+    #Split a .fasta file with multiple entries into multiple
+    #individual .fasta files
+    import os
+    from Bio import SeqIO, AlignIO
+     
+    # Get file and directory names for unified output
+    indir = os.path.dirname(filename)
+    base_filename = os.path.basename(filename)
+    base_noext = os.path.splitext(base_filename)[0]
+    base_noext = ''.join((base_noext,'_individuals'))
+    out_dirname = os.path.join(indir,base_noext)
+    # make output directory if it DNE
+    try:
+        os.stat(out_dirname)
+    except:
+        os.mkdir(out_dirname)
+
+    seqs = AlignIO.read(filename,'fasta')
+    for rec in seqs:
+       rec_basename = ''.join((rec.name,'.fasta'))
+       rec_filename = path.join(out_dirname,rec_basename)
+       print rec_filename
+       with open(rec_filename,'w') as output_handle:
+           SeqIO.write(rec,output_handle,'fasta')
+       
