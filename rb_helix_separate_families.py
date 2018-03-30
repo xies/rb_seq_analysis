@@ -83,7 +83,7 @@ for rec in metazoa:
 
 opt = LogoOptions()
 opt.logo_start = 1
-opt.logo_end = 30
+opt.logo_end = 21
 
 SeqIO.write(rb,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/readable_trimmed_rb.mfa','fasta')
 write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/readable_trimmed_rb.mfa',
@@ -124,10 +124,10 @@ for name in rbl1_names:
     else:
         print "Oh no!", name
 #        break
-SeqIO.write(rbl1,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl1/rbl1_tree.mfa','fasta')
+SeqIO.write(rbl1,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl1/rbl1_tree_humanRB.mfa','fasta')
 opt.logo_title = 'RB-like 1 family'
-write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl1/rbl1_tree.mfa',
-           '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl1/rbl1_tree.eps',
+write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl1/rbl1_tree_humanRB.mfa',
+           '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl1/rbl1_tree_humanRB.eps',
            opt)
 
 # Load the subtrees associated with RBL2 (p130) family and record trimmed FASTA alignment
@@ -146,10 +146,10 @@ for name in rbl2_names:
     else:
         print "Oh no!", name
 #        break
-SeqIO.write(rbl2,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl2/rbl2_tree.mfa','fasta')
+SeqIO.write(rbl2,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl2/rbl2_tree_humanRB.mfa','fasta')
 opt.logo_title = 'RB-like 2 family'
-write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl2/rbl2_tree.mfa',
-           '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl2/rbl2_tree.eps',
+write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl2/rbl2_tree_humanRB.mfa',
+           '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rbl2/rbl2_tree_humanRB.eps',
            opt)
 
 
@@ -169,10 +169,10 @@ for name in rb_names:
     else:
         print "Oh no!", name
 #        break
-SeqIO.write(rb,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rb/rb_tree.mfa','fasta')
+SeqIO.write(rb,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rb/rb_tree_humanRB.mfa','fasta')
 opt.logo_title = 'pRB family'
-write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rb/rb_tree.mfa',
-           '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rb/rb_tree.eps',
+write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rb/rb_tree_humanRB.mfa',
+           '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/rb/rb_tree_humanRB.eps',
            opt)
 
 

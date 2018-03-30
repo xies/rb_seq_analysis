@@ -14,15 +14,24 @@ import re
 from weblogolib import *
 
 
-# Load trimmed FASTA files
+# Load FASTA files
 filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/readable_names.fasta'
 readable = AlignIO.read(filename,'fasta')
+
+# Trim 
+left_bound = 9347
+right_bound = 9545
+for rec in readable:
+    rec.seq = rec.seq[left_bound:right_bound]
+filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/readable_names_trimmed_python.fasta'
+SeqIO.write(readable,filename,'fasta')
 
 # Load trimmed FASTA files
 filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/readable_names_trimmed.fasta'
 readable_trimmed = AlignIO.read(filename,'fasta')
+
 # Fix the record names
-for rec in readable_trimmed:
+for rec in readable:
     name = rec.id
     # Negative lookbehind regex
     new_name = re.search('(?<!\/)\w+', name)
@@ -33,23 +42,37 @@ for rec in readable_trimmed:
 
 opt = LogoOptions()
 opt.logo_start = 1
-opt.logo_end = 22
+opt.logo_end = 21
 
 #--- filter by occupancy ---
 #filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/occupancy.csv'
 #occupancy = genfromtxt(filename, delimiter=',')
 #filtered = filter_by_occupancy(readable_trimmed,occupancy,15) # thresh = 15
 
-# Filter by metazoan occupancy
-filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/metazoan_occupancy.csv'
-met_occ = genfromtxt(filename, delimiter=',')
-filtered = filter_by_occupancy(readable_trimmed,met_occ,20) # thresh = 20
 
-opt.logo_title = 'Eukaryotic RB family (filtered by metazoan occupancy)'
-SeqIO.write(filtered,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/trimmed_met_occ>20.mfa','fasta')
-write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/trimmed_met_occ>20.mfa',
-           '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/trimmed_met_occ>20.eps',
+# Filter by HUMAN_RB1 occupancy
+for rec in readable:
+    name = rec.id
+    if name.find('RB_HUMAN') > 0:
+        rb_human = rec
+filtered = finter_by_single_s_occupancy(readable,rb_human)
+
+opt.logo_title = 'Eukaryotic RB family'
+SeqIO.write(filtered,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/trimmed_met_humanRB.mfa','fasta')
+write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/trimmed_met_humanRB.mfa',
+           '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/trimmed_met_humanRB.pdf',
            opt)
+
+## Filter by metazoan occupancy
+#filename = '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/metazoa/metazoan_occupancy.csv'
+#met_occ = genfromtxt(filename, delimiter=',')
+#filtered = filter_by_occupancy(readable_trimmed,met_occ,20) # thresh = 20
+#
+#opt.logo_title = 'Eukaryotic RB family (filtered by metazoan occupancy)'
+#SeqIO.write(filtered,'/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/trimmed_met_occ>20.mfa','fasta')
+#write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/trimmed_met_occ>20.mfa',
+#           '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/trimmed_met_occ>20.eps',
+#           opt)
 
 ##--- Filter by phyllum ---
 # metazoa
@@ -194,6 +217,18 @@ opt.logo_title = 'Amoebozoa (slime molds) RB family'
 write_logo('/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/choanomonada/choanomonada_met_occ>20.fasta',
            '/Users/mimi/Box Sync/Bioinformatics/RB helix/Elife_RB/72_eukaryotes/mafft/4__mafft_align/choanomonada/choanomonada_met_occ>20.eps',
            opt)
+
+##### helper functions #####
+
+def finter_by_single_s_occupancy(seqs,gene):
+    filtered = []
+    I = np.array( gene.seq ) != '-'
+    for rec in seqs:
+        s = np.array(rec.seq)[I]
+        rec.seq = Seq(''.join(s))
+        if rec.seq.ungap('-') != '':
+            filtered.append(rec)
+    return filtered
 
 def filter_by_occupancy(seqs,occupancy,thresh):
     """ Filter by an occupancy array according to provided threshold; will also
