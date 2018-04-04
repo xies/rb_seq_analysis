@@ -257,4 +257,37 @@ def delete_trailing_aas_from_rec_id(seqs):
         new_name = '_'.join(re.split('_',new_name.group(0))[-2:])
         rec.id = new_name
         
-        
+
+
+def split_into_individual_fastas(filename):
+    #Split a .fasta file with multiple entries into multiple
+    #individual .fasta files
+    import os
+    from Bio import SeqIO, AlignIO
+     
+    # Get file and directory names for unified output
+    indir = os.path.dirname(filename)
+    base_filename = os.path.basename(filename)
+    base_noext = os.path.splitext(base_filename)[0]
+    base_noext = ''.join((base_noext,'_individuals'))
+    out_dirname = os.path.join(indir,base_noext)
+    # make output directory if it DNE
+    try:
+        os.stat(out_dirname)
+    except:
+        os.mkdir(out_dirname)
+
+    seqs = AlignIO.read(filename,'fasta')
+    
+    delete_trailing_aas_from_rec_id(seqs)
+    delete_trailing_aas_from_rec_name(seqs)
+    for rec in seqs:
+       rec_basename = ''.join((rec.name,'.fasta'))
+       rec_filename = path.join(out_dirname,rec_basename)
+       rec.seq = rec.seq.ungap('-')
+       if rec.seq == '':
+           continue
+       print rec_filename
+       with open(rec_filename,'w') as output_handle:
+           SeqIO.write(rec,output_handle,'fasta')
+       
