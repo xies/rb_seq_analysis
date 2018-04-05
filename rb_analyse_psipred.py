@@ -37,6 +37,7 @@ for filename in os.listdir(UNGAPPED_DIR):
         I = s_array != '-'
         s_array[I] = df.prediction
         seq_ss.seq = Seq.Seq(''.join(s_array))
+        seq_ss.id = os.path.splitext(fastaname)[0]
         seqs.append(seq_ss)
     else:
         continue
