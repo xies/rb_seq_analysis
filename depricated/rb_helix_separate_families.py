@@ -187,6 +187,20 @@ def get_tree_leaves(tree_filename):
             names.append(x.lstrip())
     return names
 
-#
+
+def write_logo(filename,out_name,options):
+    # Wrapper for weblogo
+    fin = open(filename)
+    seqs = read_seq_data(fin)
+    data = LogoData.from_seqs(seqs)
+    form = LogoFormat(data,options)
+    eps = eps_formatter(data,form)
+    fout = open(out_name,'w')
+    fout.write(eps)
+    fout.close()
+    fin.close()
+    
+
+    
 #def delete_leading_space(list_of_string):
 #    return [s.lstrip() for s in list_of_string]

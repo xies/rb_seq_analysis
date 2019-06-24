@@ -178,3 +178,16 @@ def split_into_individual_fastas(filename):
        with open(rec_filename,'w') as output_handle:
            SeqIO.write(rec,output_handle,'fasta')
        
+
+def write_logo(filename,out_name,options):
+    # Wrapper for weblogo
+    fin = open(filename)
+    seqs = read_seq_data(fin)
+    data = LogoData.from_seqs(seqs)
+    form = LogoFormat(data,options)
+    eps = eps_formatter(data,form)
+    fout = open(out_name,'w')
+    fout.write(eps)
+    fout.close()
+    fin.close()
+    

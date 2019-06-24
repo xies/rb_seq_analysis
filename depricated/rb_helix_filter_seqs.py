@@ -20,8 +20,13 @@ filename = '/home/xies/Desktop/Elife_RB/72_eukaryotes/mafft/4__mafft_align/reada
 readable = AlignIO.read(filename,'fasta')
 
 # Trim 
+<<<<<<< Updated upstream:depricated/rb_helix_filter_seqs.py
 left_bound = 9237
 right_bound = 9655
+=======
+left_bound = 9337
+right_bound = 9555
+>>>>>>> Stashed changes:rb_helix_filter_seqs.py
 for rec in readable:
     rec.seq = rec.seq[left_bound:right_bound]
 filename = '/home/xies/Desktop/Elife_RB/72_eukaryotes/mafft/4__mafft_align/readable_names/readable_names_trimmed_python.fasta'
@@ -263,16 +268,3 @@ def filter_by_gene_name(seqs,target_list):
            filtered.append(rec)
     return filtered
         
-
-def write_logo(filename,out_name,options):
-    # Wrapper for weblogo
-    fin = open(filename)
-    seqs = read_seq_data(fin)
-    data = LogoData.from_seqs(seqs)
-    form = LogoFormat(data,options)
-    eps = eps_formatter(data,form)
-    fout = open(out_name,'w')
-    fout.write(eps)
-    fout.close()
-    fin.close()
-    
