@@ -26,7 +26,7 @@ def randomize_position(pos):
     # Find non indel species
     I = np.where( pos != '-' )
     Iperm = np.permute(I)
-    return pos
+    return pos[Iperm]
 
 def mutual_information(seqs,i,j):
      
@@ -50,7 +50,7 @@ def mutual_information(seqs,i,j):
     Pij = normalize(Pij)
     
     return sum(Pij[(x,y)] * \
-                  log(  np.float(Pij[(x,y)]) / np.float(Pi[x]*Pj[y]) ) \
+                  np.log(  np.float(Pij[(x,y)]) / np.float(Pi[x]*Pj[y]) ) \
                   for x,y in Pij)
 
 def add_all_AAs(Pi):

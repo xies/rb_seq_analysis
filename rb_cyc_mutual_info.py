@@ -13,12 +13,12 @@ from scipy import stats
 
 
 # Read in the filtered RB .aln clustal file
-msa_file = '/Users/mimi/Box Sync/Bioinformatics/RB helix/rb_fastas.aln'
-RB = AlignIO.read(msa_file, "clustal")
+msa_file = '/Users/xies/Box/Bioinformatics/RB family/rb_fastas_mafft.fasta'
+RB = AlignIO.read(msa_file, "fasta")
 RB_array = np.array([list(rec) for rec in RB], np.character)
 
 # Filtered Cyclin .aln
-msa_file = '/Users/mimi/Dropbox (Personal)/Mol Bio/DNA sequences/Cyclin family/cyc_filtered.aln'
+msa_file = '/Users/xies/Box/Mol Bio/DNA sequences/Cyclin family/cyc_filtered.aln'
 Cyc = AlignIO.read(msa_file, "clustal")
 Cyc_array = np.array([list(rec) for rec in Cyc], np.character)
 
@@ -51,7 +51,7 @@ sortedMI = sortedMI[::-1]
 
 st = 10
 for i,score in enumerate(sortedMI[st:st+10]):
-    print 'Top ', st+i+1, 'th score: ', score, ' at alignment position: ', I[i], '\n'
+    print(f'Top {st+i+1} th score: {score}, at alignment position: {I[i]}')
 
 # Save RB motif region
 motif_beg = 1910
